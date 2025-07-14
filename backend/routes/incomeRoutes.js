@@ -1,4 +1,5 @@
 import express from "express";
+import { authenticate } from "../middleware/auth.js"; // or similar
 import {
   getAllIncomes,
   createIncome,
@@ -8,6 +9,8 @@ import {
 } from "../controllers/incomeController.js";
 
 const incomeRouter = express.Router();
+
+incomeRouter.use(authenticate); // <-- This line ensures all routes require authentication
 
 incomeRouter.get("/", getAllIncomes);
 incomeRouter.post("/", createIncome);

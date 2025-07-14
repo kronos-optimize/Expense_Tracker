@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { LayoutDashboard, Plus, LogOut, DollarSign, User, X, TrendingUp, List } from "lucide-react"
+import { LayoutDashboard, Plus, LogOut, DollarSign, User, X, TrendingUp, List, Folder, FolderOpen } from "lucide-react"
 import Link from "next/link"
 
 const menuItems = [
@@ -26,6 +26,16 @@ const menuItems = [
 		title: "Manage Incomes",
 		url: "/dashboard/incomes",
 		icon: List,
+	},
+	{
+		title: "Expense Categories",
+		url: "/dashboard/categories",
+		icon: Folder,
+	},
+	{
+		title: "Income Categories",
+		url: "/dashboard/income-categories",
+		icon: FolderOpen,
 	},
 ]
 

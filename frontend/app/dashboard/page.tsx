@@ -17,7 +17,7 @@ export default function DashboardPage() {
     id: string | number
     date: string
     amount: number
-    category: string
+    category: string | { name: string }
     title: string
     notes?: string
   }
@@ -45,13 +45,16 @@ export default function DashboardPage() {
 
   const fetchExpenses = async () => {
     try {
-      const data = await expensesApi.getAll(filter === "all" ? undefined : filter)
-      setFilteredExpenses(data)
-      await fetchSummary()
+      const data = await expensesApi.getAll(filter === "all" ? undefined : filter);
+      // Sort by date descending
+      data.sort((a: Expense, b: Expense) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      setExpenses(data); // <-- Set the full list here
+      setFilteredExpenses(data);
+      await fetchSummary();
     } catch (error) {
-      console.error("Error fetching expenses:", error)
+      console.error("Error fetching expenses:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchExpenses()
@@ -80,6 +83,31 @@ export default function DashboardPage() {
     }
     fetchIncomes()
   }, [])
+
+  function isCategoryWithName(category: unknown): category is { name: string } {
+    return typeof category === "object" && category !== null && "name" in category && typeof (category as any).name === "string";
+  }
+
+  useEffect(() => {
+    if (categoryFilter) {
+      if (expenses.length > 0) {
+        console.log("Filtering by:", categoryFilter);
+        console.log("Sample expense:", expenses[0]);
+      }
+      setFilteredExpenses(
+        expenses.filter(exp => {
+          if (typeof exp.category === "string") {
+            return exp.category === categoryFilter;
+          } else if (isCategoryWithName(exp.category)) {
+            return exp.category.name === categoryFilter;
+          }
+          return false;
+        })
+      );
+    } else {
+      setFilteredExpenses(expenses);
+    }
+  }, [categoryFilter, expenses]);
 
   const handleFilterChange = async (value: string) => {
     setFilter(value)
@@ -199,15 +227,13 @@ export default function DashboardPage() {
 
           {/* Expenses List */}
           <div className="space-y-4">
-            {filteredExpenses
-              .filter(exp => !categoryFilter || exp.category === categoryFilter)
-              .map((expense: any) => (
-                <ExpenseCard
-                  key={expense.id}
-                  expense={expense}
-                  onDelete={fetchExpenses}
-                />
-              ))}
+            {filteredExpenses.map((expense: any) => (
+              <ExpenseCard
+                key={expense.id}
+                expense={expense}
+                onDelete={fetchExpenses}
+              />
+            ))}
           </div>
         </CardContent>
       </Card>
