@@ -7,11 +7,13 @@ import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Expense Tracker",
   description: "Track your expenses efficiently",
-    generator: 'v0.dev'
-}
+  icons: {
+    icon: "../public/image.png", 
+  },
+};
 
 export default function RootLayout({
   children,

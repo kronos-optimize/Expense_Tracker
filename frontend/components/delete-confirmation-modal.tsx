@@ -17,8 +17,8 @@ interface DeleteConfirmationModalProps {
   onClose: () => void
   expenseTitle: string
   expenseAmount: number
-  onConfirm: () => void // <-- Add this prop
-  isLoading?: boolean   // <-- Optional, for loading state
+  onConfirm: () => void 
+  isLoading?: boolean  
 }
 
 export function DeleteConfirmationModal({
