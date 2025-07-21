@@ -4,7 +4,6 @@ import { Expense, ExpenseCategory } from "../model/index.js";
 // Get all expenses for the logged-in user with date filtering
 export const getAllExpenses = async (req, res) => {
   try {
-    console.log("User in getAllExpenses:", req.user);
     const { filter, startDate, endDate } = req.query;
     const today = new Date();
     const where = { userId: req.user.id };
@@ -28,14 +27,12 @@ export const getAllExpenses = async (req, res) => {
       where.date = { [Op.gte]: startDate, [Op.lte]: endDate };
     }
 
-    console.log("Fetching expenses for user:", req.user);
     const expenses = await Expense.findAll({
       where,
       include: [{ model: ExpenseCategory, as: 'category' }],
     });
     res.json(expenses);
   } catch (err) {
-    console.error("Error in getAllExpenses:", err);
     res.status(500).json({ error: "Failed to fetch expenses" });
   }
 };
@@ -43,14 +40,12 @@ export const getAllExpenses = async (req, res) => {
 // Create a new expense for the logged-in user
 export const createExpense = async (req, res) => {
   try {
-    console.log('req.user:', req.user); // Add this line
     const expense = await Expense.create({
       ...req.body,
       userId: req.user.id,
     });
     res.status(201).json(expense);
   } catch (err) {
-    console.error(err);
     res.status(400).json({ error: err.message || "Failed to create expense" });
   }
 };
@@ -142,7 +137,6 @@ export const getExpenseStats = async (req, res) => {
       threeMonths: threeMonthsSum || 0
     });
   } catch (err) {
-    console.error("Error in getExpenseStats:", err);
     res.status(500).json({ error: "Failed to fetch stats" });
   }
 };

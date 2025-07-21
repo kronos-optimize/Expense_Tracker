@@ -1,4 +1,5 @@
 import express from "express";
+import { authenticate } from "../middleware/auth.js";
 import {
   getAllIncomeCategories,
   createIncomeCategory,
@@ -8,6 +9,9 @@ import {
 } from "../controllers/incomeCategoryController.js";
 
 const incomeCategoryRouter = express.Router();
+
+// author to display only that user's category
+incomeCategoryRouter.use(authenticate);
 
 incomeCategoryRouter.get("/", getAllIncomeCategories);
 incomeCategoryRouter.post("/", createIncomeCategory);

@@ -2,7 +2,8 @@ import { ExpenseCategory } from "../model/index.js";
 
 export const getAllCategories = async (req, res) => {
   try {
-    const categories = await ExpenseCategory.findAll();
+    const userId = req.user.id; // Get userId from token
+    const categories = await ExpenseCategory.findAll({ where: { userId } });
     res.json(categories);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch categories" });
@@ -11,7 +12,8 @@ export const getAllCategories = async (req, res) => {
 
 export const createCategory = async (req, res) => {
   try {
-    const category = await ExpenseCategory.create(req.body);
+    const userId = req.user.id;
+    const category = await ExpenseCategory.create({ ...req.body, userId });
     res.status(201).json(category);
   } catch (err) {
     console.error(err);

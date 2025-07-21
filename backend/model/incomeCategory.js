@@ -10,12 +10,22 @@ const IncomeCategory = sequelize.define("IncomeCategory", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   description: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}, {
+  indexes: [
+    {
+      unique: true,
+      fields: ['userId', 'name'],
+    },
+  ],
 });
 
-export default IncomeCategory; 
+export default IncomeCategory;

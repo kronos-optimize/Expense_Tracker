@@ -1,34 +1,32 @@
 # 💰 Expense Tracker App
 
-A modern, responsive expense tracking application built with **Next.js 14** frontend, designed to be integrated with an **Express.js** backend. Track your expenses efficiently with a beautiful green-themed UI and comprehensive features.
+A modern, responsive expense tracking application built with **Next.js 14** frontend and **Express.js** backend. Track your expenses efficiently with a beautiful green-themed UI and comprehensive features.
 
 ---
 
 ## 🌟 Features
 
 ### 🔐 Authentication System
-- **User Registration** – Create new accounts with email and password
+- **User Registration** – Create new accounts with email and password (passwords securely hashed with bcrypt)
 - **User Login** – Secure login with JWT token storage
 - **Forgot Password** – Password reset with email and new password
 - **Session Management** – Automatic logout and token handling
 
-### 💸 Expense Management
-- **Add Expenses** – Create new expense entries with title, amount, date, category, and notes
-- **Edit Expenses** – Update existing expense details
-- **Delete Expenses** – Remove expenses with confirmation modal
-- **View Expenses** – Display expenses in an organized card layout
+### 💸 Expense & Income Management
+- **Add Expenses/Incomes** – Create new entries with title, amount, date, category, and notes
+- **Edit & Delete** – Update or remove entries with confirmation
+- **User-Specific Categories** – Each user has their own set of income and expense categories
+- **Category Management** – Create, view, and manage categories filtered by logged-in user
 
 ### 📊 Dashboard & Analytics
-- **Summary Cards** – View spending totals for this week, month, and last 3 months (auto-updates on changes)
-- **Expense Filtering** – Filter by time periods (week, month, 3 months, custom range)
-- **Date Range Picker** – Custom date range selection for detailed filtering
-- **Category Organization** – Color-coded expense categories
+- **Summary Cards** – View spending and income totals for week, month, and last 3 months
+- **Filtering** – Filter by time periods and custom date ranges
+- **Category Organization** – Color-coded categories per user
 
 ### 🎨 User Interface
 - **Modern Design** – Clean, intuitive interface with green primary theme
 - **Dark Mode Support** – Toggle between light and dark themes
 - **Responsive Layout** – Works perfectly on desktop, tablet, and mobile
-- **Loading States** – Smooth loading indicators and transitions
 - **Toast Notifications** – User-friendly success and error messages
 
 ---
@@ -42,15 +40,13 @@ A modern, responsive expense tracking application built with **Next.js 14** fron
 - **Tailwind CSS** - Utility-first CSS framework
 - **shadcn/ui** - Modern UI component library
 - **Lucide React** - Beautiful icons
-- **React Hook Form** - Form handling
-- **date-fns** - Date manipulation
 
 ### Backend
 - **Express.js** – Node.js web framework
 - **Sequelize ORM** – Database ORM
 - **JWT Authentication** – Secure token-based auth
 - **bcryptjs** – Password hashing
-- **MySQL** – Database options
+- **MySQL** – Database
 
 ---
 
@@ -63,29 +59,50 @@ A modern, responsive expense tracking application built with **Next.js 14** fron
 ### Installation
 
 1. **Clone the repository**
-  ```bash
+   ```bash
    git clone <your-repo-url>
    cd expense-tracker
-  ```
+   ```
 
-2. **Run the backend server**
-  ```bash
+2. **Configure environment variables**
+
+   - **Backend:**  
+     Create a `.env` file inside the `backend` folder with your database credentials:
+     ```
+     DB_HOST=localhost
+     DB_USER=root
+     DB_PASS=your_mysql_password
+     DB_NAME=expense_tracker
+     PORT=4000
+     JWT_SECRET=your_jwt_secret
+     ```
+
+   - **Frontend:**  
+     Create a `.env.local` file in the root of your frontend (Next.js) project:
+     ```
+     NEXT_PUBLIC_API_URL=http://localhost:4000
+     ```
+
+3. **Run the backend server**
+   ```bash
    cd backend
    npm install
    npm run dev
-  ```
+   ```
 
-3. **Run the development server**
-  ```bash
-  cd ../
-  npm install
-  npm run dev
-  # or
-  yarn dev
-  ```
+4. **Run the frontend server**
+   ```bash
+   cd ../
+   npm install
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-4. **Open your browser**
+5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
+
+---
 
 ## 📁 Project Structure
 
@@ -95,8 +112,8 @@ expense-tracker/
 │   ├── controllers/            # Route controllers
 │   ├── models/                 # Sequelize models
 │   ├── routes/                 # API routes
-│   ├── database.sqlite         # SQLite database (if used)
-│   ├── app.js                  # Express app entry
+│   ├── db/                     # Database config and seeders
+│   ├── server.js               # Express app entry
 │   └── ...                     # Other backend files
 ├── app/                        # Next.js App Router
 │   ├── dashboard/              # Dashboard pages
@@ -107,7 +124,9 @@ expense-tracker/
 ├── ...                         # Other config files
 ```
 
-### 🔌API Endpoints 
+---
+
+### 🔌 API Endpoints 
 
 #### Authentication Endpoints
 ```
@@ -116,22 +135,34 @@ expense-tracker/
 - POST /api/users/forgot-password – Reset password
 ```
 
-#### Expense Endpoints
+#### Expense & Income Endpoints
 ```
-- GET /api/expenses – Get all expenses (with filters)
+- GET /api/expenses – Get all expenses (filtered by user)
 - POST /api/expenses – Add new expense
 - GET /api/expenses/:id – Get expense by ID
 - PUT /api/expenses/:id – Update expense
 - DELETE /api/expenses/:id – Delete expense
-- GET /api/expenses/summary/stats – Get summary (week, month, 3 months)
+
+- GET /api/incomes – Get all incomes (filtered by user)
+- POST /api/incomes – Add new income
+- GET /api/incomes/:id – Get income by ID
+- PUT /api/incomes/:id – Update income
+- DELETE /api/incomes/:id – Delete income
+
+- GET /api/categories/expenses – Get expense categories for logged-in user
+- POST /api/categories/expenses – Create expense category for logged-in user
+- GET /api/categories/incomes – Get income categories for logged-in user
+- POST /api/categories/incomes – Create income category for logged-in user
 ```
 
-### Database Schema
+---
+
+### Database Schema (Simplified)
 
 #### Users Table
 ```sql
 CREATE TABLE users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -139,43 +170,71 @@ CREATE TABLE users (
 );
 ```
 
-#### Expenses Table
+#### IncomeCategory & ExpenseCategory Tables (user-specific)
 ```sql
-CREATE TABLE expenses (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title VARCHAR(255) NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  date DATE NOT NULL,
-  category VARCHAR(50) NOT NULL,
-  notes TEXT,
-  user_id INTEGER NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+CREATE TABLE income_categories (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(255),
+  userId INT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE expense_categories (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(255),
+  userId INT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 ```
 
-## 🎯 Current Status##
+#### Expenses & Incomes Table
+```sql
+CREATE TABLE expenses (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  date DATE NOT NULL,
+  notes TEXT,
+  userId INT NOT NULL,
+  categoryId INT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (categoryId) REFERENCES expense_categories(id) ON DELETE CASCADE
+);
+
+CREATE TABLE incomes (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  date DATE NOT NULL,
+  notes TEXT,
+  userId INT NOT NULL,
+  categoryId INT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (categoryId) REFERENCES income_categories(id) ON DELETE CASCADE
+);
+```
+
+---
+
+## 📝 Seeding Logic
+
+- **Seed runs only once:** On first run, if no users exist, initial users and categories are created.
+- **User-specific categories:** Each user gets their own set of income and expense categories.
+- **Passwords are hashed** before saving users.
+
+---
+
+## 🎯 Current Status
 
 - ✅ Backend and frontend are fully integrated
 - ✅ All features are functional with real API and persistent data
-- ✅ Summary cards auto-update when expenses are added/edited/deleted
+- ✅ User-specific categories and data filtering
 - ✅ Authentication and session management implemented
 - ✅ Responsive, modern UI
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🎉 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - The React framework
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
-- [Lucide](https://lucide.dev/) - Beautiful icons
 
 ---
 
 **Happy expense tracking! 💚**
-```
 

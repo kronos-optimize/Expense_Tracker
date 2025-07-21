@@ -2,6 +2,7 @@ import "./model/index.js"; // Import associations
 import express from "express";
 import cors from "cors";
 import sequelize from "./db/database.js";
+import seedDatabase from "./db/seeder.js";
 import expenseRouter from "./routes/expenseRoutes.js"; 
 import userRouter from "./routes/userRoutes.js";
 import expenseCategoryRouter from "./routes/expenseCategoryRoutes.js";
@@ -14,7 +15,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:3000", // or your frontend URL
+  origin: "http://localhost:3000", // our frontend source
 }));
 app.use(express.json());
 
@@ -25,7 +26,8 @@ app.use("/api/incomes", incomeRouter);
 app.use("/api/income-categories", incomeCategoryRouter);
 
 const PORT = 4000;
-sequelize.sync().then(() => {
+sequelize.sync().then( async() => {
+  await seedDatabase(); // clone some data for demo
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });

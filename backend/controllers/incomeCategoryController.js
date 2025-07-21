@@ -2,7 +2,9 @@ import { IncomeCategory } from "../model/index.js";
 
 export const getAllIncomeCategories = async (req, res) => {
   try {
-    const categories = await IncomeCategory.findAll();
+    // Assuming req.user.id is set by your auth middleware
+    const userId = req.user.id;
+    const categories = await IncomeCategory.findAll({ where: { userId } });
     res.json(categories);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch income categories" });
@@ -11,7 +13,8 @@ export const getAllIncomeCategories = async (req, res) => {
 
 export const createIncomeCategory = async (req, res) => {
   try {
-    const category = await IncomeCategory.create(req.body);
+    const userId = req.user.id;
+    const category = await IncomeCategory.create({ ...req.body, userId });
     res.status(201).json(category);
   } catch (err) {
     res.status(400).json({ error: "Failed to create income category" });
@@ -48,4 +51,4 @@ export const deleteIncomeCategory = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Failed to delete income category" });
   }
-}; 
+};

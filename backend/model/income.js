@@ -7,6 +7,10 @@ const Income = sequelize.define("Income", {
     autoIncrement: true,
     primaryKey: true,
   },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   amount: {
     type: DataTypes.FLOAT,
     allowNull: false,

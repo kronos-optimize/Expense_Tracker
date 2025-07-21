@@ -10,7 +10,7 @@ import {
 
 const incomeRouter = express.Router();
 
-incomeRouter.use(authenticate); // <-- This line ensures all routes require authentication
+incomeRouter.use(authenticate); // all routes require authentication
 
 incomeRouter.get("/", getAllIncomes);
 incomeRouter.post("/", createIncome);
