@@ -60,7 +60,7 @@ A modern, responsive expense tracking application built with **Next.js 14** fron
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/kronos-optimize/Expense_Tracker.git
    cd expense-tracker
    ```
 
