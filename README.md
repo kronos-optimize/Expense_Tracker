@@ -107,52 +107,70 @@ A modern, responsive expense tracking application built with **Next.js 14** fron
 ## 📁 Project Structure
 
 ```
-expense-tracker/
-├── backend/                    # Express.js backend
-│   ├── controllers/            # Route controllers
-│   ├── models/                 # Sequelize models
-│   ├── routes/                 # API routes
-│   ├── db/                     # Database config and seeders
-│   ├── server.js               # Express app entry
-│   └── ...                     # Other backend files
-├── app/                        # Next.js App Router
-│   ├── dashboard/              # Dashboard pages
-│   ├── ...                     # Other frontend pages
-├── components/                 # Reusable components
-├── lib/                        # Utility functions
-├── public/                     # Static assets
-├── ...                         # Other config files
+Expense_Tracker/
+├── backend/                       # Express.js backend
+│   ├── controllers/               # Route controllers (user, expense, income, etc.)
+│   ├── db/                        # Database config and seeders
+│   ├── models/                    # Sequelize models
+│   ├── routes/                    # API route definitions
+│   ├── server.js                  # Express app entry point
+│   └── ...                        # Other backend files
+├── frontend/                      # Next.js 14 frontend
+│   ├── app/                       # App Router pages
+│   ├── components/                # Reusable React components
+│   ├── lib/                       # Utility functions
+│   ├── public/                    # Static assets
+│   ├── styles/                    # Global styles (if any)
+│   └── ...                        # Other frontend files
+├── README.md                      # Project documentation
 ```
 
 ---
 
-### 🔌 API Endpoints 
+### 🔌 API Endpoints
 
-#### Authentication Endpoints
+#### User Endpoints
 ```
-- POST /api/users/register – Register new user
-- POST /api/users/login – Login, returns { token, user: { id, email } }
-- POST /api/users/forgot-password – Reset password
+POST   /api/users/register           # Register new user
+POST   /api/users/login              # Login, returns { token, user }
+POST   /api/users/forgot-password    # Request password reset
 ```
 
-#### Expense & Income Endpoints
+#### Expense Endpoints
 ```
-- GET /api/expenses – Get all expenses (filtered by user)
-- POST /api/expenses – Add new expense
-- GET /api/expenses/:id – Get expense by ID
-- PUT /api/expenses/:id – Update expense
-- DELETE /api/expenses/:id – Delete expense
+GET    /api/expenses                 # Get all expenses for logged-in user
+POST   /api/expenses                 # Add new expense
+GET    /api/expenses/:id             # Get expense by ID
+PUT    /api/expenses/:id             # Update expense by ID
+DELETE /api/expenses/:id             # Delete expense by ID
+GET    /api/expense//summary/stats   # get summary data for display at dashboard
+```
 
-- GET /api/incomes – Get all incomes (filtered by user)
-- POST /api/incomes – Add new income
-- GET /api/incomes/:id – Get income by ID
-- PUT /api/incomes/:id – Update income
-- DELETE /api/incomes/:id – Delete income
+#### Income Endpoints
+```
+GET    /api/incomes                  # Get all incomes for logged-in user
+POST   /api/incomes                  # Add new income
+GET    /api/incomes/:id              # Get income by ID
+PUT    /api/incomes/:id              # Update income by ID
+DELETE /api/incomes/:id              # Delete income by ID
+```
 
-- GET /api/categories/expenses – Get expense categories for logged-in user
-- POST /api/categories/expenses – Create expense category for logged-in user
-- GET /api/categories/incomes – Get income categories for logged-in user
-- POST /api/categories/incomes – Create income category for logged-in user
+#### Income Category Endpoints
+```
+GET    /api/income-categories                # Get income categories for logged-in user
+POST   /api/income-categories                # Create income category for logged-in user
+GET    /api/income-categories/:id            # Get income category by ID
+PUT    /api/income-categories/:id            # Update income category by ID
+DELETE /api/income-categories/:id            # Delete income category by ID
+```
+
+#### Expense Category Endpoints
+```
+GET    /api/categories               # Get expense categories for logged-in user
+POST   /api/categories               # Create expense category for logged-in user
+GET    /api/categories/:id           # Get expense category by ID
+PUT    /api/categories/:id           # Update expense category by ID
+DELETE /api/categories/:id           # Delete expense category by ID
 ```
 
 ---
