@@ -143,7 +143,7 @@ POST   /api/expenses                 # Add new expense
 GET    /api/expenses/:id             # Get expense by ID
 PUT    /api/expenses/:id             # Update expense by ID
 DELETE /api/expenses/:id             # Delete expense by ID
-GET    /api/expense//summary/stats   # get summary data for display at dashboard
+GET    /api/expense/summary/stats   # get summary data for display at dashboard
 ```
 
 #### Income Endpoints
