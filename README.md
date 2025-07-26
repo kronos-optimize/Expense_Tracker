@@ -80,7 +80,7 @@ A modern, responsive expense tracking application built with **Next.js 14** fron
    - **Frontend:**  
      Create a `.env.local` file in the root of your frontend (Next.js) project:
      ```
-     NEXT_PUBLIC_API_URL=http://localhost:4000
+     NEXT_PUBLIC_API_URL=http://localhost:4000/api
      ```
 
 3. **Run the backend server**
