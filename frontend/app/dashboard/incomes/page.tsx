@@ -95,7 +95,7 @@ export default function IncomesPage() {
   const handleUpdate = async (id: number) => {
     setIsLoading(true)
     try {
-      await incomesApi.update(id, { amount: parseFloat(editAmount), date: editDate, category: editCategory, notes: editNotes })
+      await incomesApi.update(id, { amount: parseFloat(editAmount), date: editDate, categoryId: categories.find(cat => cat.name === editCategory)?.id || "", notes: editNotes })
       toast({ title: "Income updated successfully!" })
       setEditId(null)
       fetchIncomes()
